@@ -359,7 +359,7 @@ def internet():
     :returns: True if internet connection is available
     """
     try:
-        socket.create_connection(("google-public-dns-a.google.com", 53), 1).close()
+        socket.create_connection(("208.80.154.224", 80), 1).close()
         return True
     except OSError:
         return False
