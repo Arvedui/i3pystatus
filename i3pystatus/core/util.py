@@ -384,7 +384,7 @@ class internet:
         :py:func:`require`
 
     """
-    address = ('google.com', 80)
+    address = ("208.80.154.224", 80)
     check_frequency = 1
 
     dns_cache = []
@@ -435,7 +435,6 @@ class internet:
             return socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
         except socket.gaierror:
             return []
-
 
 def make_graph(values, lower_limit=0.0, upper_limit=100.0, style="blocks"):
     """
