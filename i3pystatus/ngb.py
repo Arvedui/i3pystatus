@@ -8,7 +8,6 @@ from i3pystatus import IntervalModule
 from i3pystatus.core.util import internet, require
 
 
-
 class ngb(IntervalModule):
 
     settings = ('username', 'password')
@@ -22,7 +21,6 @@ class ngb(IntervalModule):
 
         self.login()
 
-
     def login(self):
         """
         log in method for VB"
@@ -30,15 +28,15 @@ class ngb(IntervalModule):
         url = 'https://ngb.to/login.php?do=login'
 
         params = {'do': 'login'}
-        payload = {'vb_login_username':self.username,
-                   'vb_login_password':self.password,
-                   'url':"index.php",
-                   'do':"login",
-                   'vb_login_md5password':"",
-                   'vb_login_md5password_utf':"",
-                   's':"",
-                   'securitytoken':"guest",
-                   'cookieuser':"1"}
+        payload = {'vb_login_username': self.username,
+                   'vb_login_password': self.password,
+                   'url': "index.php",
+                   'do': "login",
+                   'vb_login_md5password': "",
+                   'vb_login_md5password_utf': "",
+                   's': "",
+                   'securitytoken': "guest",
+                   'cookieuser': "1"}
 
         self.session.post(url, data=payload, params=params)
 
@@ -95,4 +93,4 @@ class ngb(IntervalModule):
         if text != '':
             text = 'NGB: ' + text
 
-        self.output  = {'full_text':text.strip(), 'name': 'NGB',}
+        self.output = {'full_text': text.strip(), 'name': 'NGB', }
