@@ -14,12 +14,14 @@ class Shell(IntervalModule):
     color = "#FFFFFF"
     error_color = "#FF0000"
     ignore_empty_stdout = False
+    blank_on_empty_stdout = False
 
     settings = (
         ("command", "command to be executed"),
         ("ignore_empty_stdout", "Let the block be empty"),
         ("color", "standard color"),
         ("error_color", "color to use when non zero exit code is returned"),
+        ("blank_on_empty_stdout", "Do not output anything if stdout is empty unless there was errer output"),
         "format"
     )
 
@@ -37,9 +39,13 @@ class Shell(IntervalModule):
         elif stderr:
             out = stderr
 
-        full_text = self.format.format(output=out).strip()
-        if not full_text and not self.ignore_empty_stdout:
-            full_text = "Command `%s` returned %d" % (self.command, retvalue)
+        if self.blank_on_empty_stdout and not out and not stderr:
+            full_text = ""
+
+        else:
+            full_text = self.format.format(output=out).strip()
+            if not full_text and not self.ignore_empty_stdout:
+                full_text = "Command `%s` returned %d" % (self.command, retvalue)
 
         self.output = {
             "full_text": full_text,
