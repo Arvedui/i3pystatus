@@ -14,6 +14,9 @@ class MaildirMail(Backend):
 
     directory = ""
 
+    def init(self):
+        self.directory = os.path.expanduser(self.directory)
+
     @property
     def unread(self):
         path = os.path.join(self.directory, "new")
