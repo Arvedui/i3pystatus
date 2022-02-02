@@ -198,12 +198,9 @@ class PulseAudio(Module, ColorRangeModule):
                 raise Exception("bar_type must be 'vertical' or 'horizontal'")
 
             selected = ""
-            dump = subprocess.check_output("pacmd dump".split(), universal_newlines=True)
-            for line in dump.split("\n"):
-                if line.startswith("set-default-sink"):
-                    default_sink = line.split()[1]
-                    if default_sink == self.current_sink:
-                        selected = self.format_selected
+            default_sink = subprocess.check_output("pactl get-default-sink".split()).strip()
+            if default_sink == self.current_sink:
+                selected = self.format_selected
 
             self.output = {
                 "color": color,
@@ -229,16 +226,16 @@ class PulseAudio(Module, ColorRangeModule):
             next_sink = self.current_sink
 
         if self.move_sink_inputs:
-            sink_inputs = subprocess.check_output("pacmd list-sink-inputs".split(),
+            sink_inputs = subprocess.check_output("pactl list-sink-inputs".split(),
                                                   universal_newlines=True)
             for input_index in re.findall(r'index:\s+(\d+)', sink_inputs):
-                command = "pacmd move-sink-input {} {}".format(input_index, next_sink)
+                command = "pactl move-sink-input {} {}".format(input_index, next_sink)
 
                 # Not all applications can be moved and pulseaudio, and when
-                # this fail pacmd print error messaging
+                # this fail pactl print error messaging
                 with open(os.devnull, 'w') as devnull:
                     subprocess.call(command.split(), stdout=devnull)
-        subprocess.call("pacmd set-default-sink {}".format(next_sink).split())
+        subprocess.call("pactl set-default-sink {}".format(next_sink).split())
 
     def switch_mute(self):
         subprocess.call(['pactl', '--', 'set-sink-mute', self.current_sink, "toggle"])
